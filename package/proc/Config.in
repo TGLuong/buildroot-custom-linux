@@ -1,0 +1,4 @@
+config BR2_PACKAGE_PROC
+	bool "proc"
+	help
+	  test new systemcall
