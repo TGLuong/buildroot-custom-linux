@@ -6,7 +6,7 @@
 
 
 PROC_VERSION=1.0.0
-PROC_SITE=./package/proc/src
+PROC_SITE=./src/proc
 PROC_SITE_METHOD=local
 
 

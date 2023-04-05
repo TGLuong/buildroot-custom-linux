@@ -3,7 +3,7 @@
 
 struct proc_info {
 	int	pid;
-	char	*name;
+	char	name[100];
 	struct proc_info *next;
 };
 
