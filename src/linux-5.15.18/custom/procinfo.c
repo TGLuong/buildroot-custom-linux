@@ -7,37 +7,35 @@
 #include <linux/uaccess.h>
 #include <linux/string.h>
 
-SYSCALL_DEFINE1(procinfo, struct proc_info __user *, proc) {
-    int proc_info_size = sizeof(struct proc_info);
-    struct proc_info *proc_head = kmalloc(proc_info_size, GFP_KERNEL);
-    struct proc_info *proc_user = kmalloc(proc_info_size, GFP_KERNEL);
-    copy_from_user(proc_user, proc, proc_info_size);
 
-    struct proc_info *proc_tail = proc_head;
-    struct task_struct *task_list;
+SYSCALL_DEFINE2(procinfo, void *, list_proc, int *, out_size)
+{
+    struct task_struct *task;
+    struct proc_info list_kernel_proc[50];
+    int size = 0;
 
-    for_each_process(task_list) {
-        struct proc_info *new_node = kmalloc(proc_info_size, GFP_KERNEL);
-
-        new_node->pid = task_list->pid;
-        new_node->next = NULL;
-        strcpy(new_node->name, task_list->comm);
-
-        proc_tail->next = new_node;
-        proc_tail = new_node;
+    for_each_process(task)
+    {
+        if (!task_is_running(task))
+            continue;
+        list_kernel_proc[size].pid = task->pid;
+        strcpy(list_kernel_proc[size].name, task->comm);
+        size++;
     }
 
-    copy_to_user(proc, proc_user, proc_info_size);
-    copy_to_user(proc_user->next, proc_head->next, proc_info_size);
-
-    struct proc_info *ele = proc_head;
-    while (ele->next != NULL) {
-        ele = ele->next;
-        printk(KERN_INFO "PRINT NODE: %d %s\n", ele->pid, ele->name);
+    if (!access_ok(list_proc, size * sizeof(struct proc_info)))
+    {
+        printk(KERN_INFO "list_proc address invalide!\n");
+        return -1;
+    }
+    if (!access_ok(out_size, sizeof(int)))
+    {
+        printk(KERN_INFO "out_size address invalide\n");
+        return -1;
     }
 
-    
-
+    copy_to_user(list_proc, list_kernel_proc, size * sizeof(struct proc_info));
+    copy_to_user(out_size, &size, sizeof(int));
 
     return 0;
 }
