@@ -6,15 +6,24 @@
 #include <string.h>
 #include "proc.h"
 
-int main()
+int get_proc(struct proc_info **list_proc) 
 {
-    struct proc_info *p = malloc(sizeof(struct proc_info));
-    long int ret = syscall(449, p);
-    printf("%d %s\n", p->pid, p->name);
-    while (p->next != NULL) {
-        p = p->next;
-        printf("%d %s\n", p->pid, p->name);
+    struct proc_info *head = calloc(1, sizeof(struct proc_info));
+    struct proc_info *tail = head;
+    struct proc_info list[50];
+    int size;
+
+    syscall(449, list, &size);
+    for (int i = 0; i < size; i++) {
+        struct proc_info *new_node = calloc(1, sizeof(struct proc_info));
+        new_node->pid = list[i].pid;
+        new_node->next = NULL;
+        strcpy(new_node->name, list[i].name);
+        printf("new node: %d %s\n", new_node->pid, new_node->name);
+
+        tail->next = new_node;
+        tail = tail->next;
     }
 
-    return 0;
+    *list_proc = head;
 }

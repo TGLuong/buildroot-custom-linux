@@ -15,7 +15,8 @@ define PROC_BUILD_CMDS
 endef
 
 define PROC_INSTALL_TARGET_CMDS
-	$(INSTALL) -D -m 755 $(@D)/proc $(TARGET_DIR)/root/proc
+	$(INSTALL) -D -m 755 $(@D)/main $(TARGET_DIR)/root/main
+	$(INSTALL) -D -m 755 $(@D)/proc1 $(TARGET_DIR)/root/proc1
 endef
 
 
