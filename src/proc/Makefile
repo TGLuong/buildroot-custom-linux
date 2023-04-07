@@ -2,16 +2,15 @@
 
 CC ?= /usr/bin/gcc
 
-OBJECT = main.o proc.o
+OBJECT = proc.o
 
 all: $(OBJECT)
-	$(CC) -o main $(OBJECT)
+	$(CC) -o main main.c $(OBJECT)
+	$(CC) -o bai2 bai2.c $(OBJECT) -lpthread -lrt
 	$(CC) -o proc1 proc1.c
-
-main.o: main.c
-	$(CC) -c main.o main.c
 
 proc.o: proc.c
 	$(CC) -c proc.o proc.c
 
 clean:
+	rm *.o

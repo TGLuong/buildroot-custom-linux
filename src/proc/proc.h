@@ -8,8 +8,9 @@ struct proc_info {
 };
 
 int get_proc(struct proc_info **list_proc);
+int free_proc(struct proc_info **head);
 
-#define for_each(p) \
-    for (; (p = p->next) != NULL;)
+#define for_each_proc(p, list) \
+    for (struct proc_info *p = list; (p = p->next) != NULL; )
 
 #endif

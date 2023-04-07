@@ -19,11 +19,31 @@ int get_proc(struct proc_info **list_proc)
         new_node->pid = list[i].pid;
         new_node->next = NULL;
         strcpy(new_node->name, list[i].name);
-        printf("new node: %d %s\n", new_node->pid, new_node->name);
 
         tail->next = new_node;
         tail = tail->next;
     }
 
     *list_proc = head;
+
+    return 0;
+}
+
+int free_proc(struct proc_info **head)
+{
+    struct proc_info *next_node, *current_node;
+
+    if (*head == NULL)
+        return 0;
+
+    current_node = *head;
+    for (;next_node != NULL;) {
+        next_node = current_node->next;
+        free(current_node);
+        current_node = next_node;
+    }
+
+    *head = NULL;
+
+    return 0;
 }

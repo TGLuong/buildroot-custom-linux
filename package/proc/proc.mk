@@ -16,7 +16,9 @@ endef
 
 define PROC_INSTALL_TARGET_CMDS
 	$(INSTALL) -D -m 755 $(@D)/main $(TARGET_DIR)/root/main
+	$(INSTALL) -D -m 755 $(@D)/bai2 $(TARGET_DIR)/root/bai2
 	$(INSTALL) -D -m 755 $(@D)/proc1 $(TARGET_DIR)/root/proc1
+	$(INSTALL) -D -m 755 $(@D)/process-handler.sh $(TARGET_DIR)/root/process-handler.sh
 endef
 
 
